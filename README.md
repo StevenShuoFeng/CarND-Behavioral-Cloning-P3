@@ -22,8 +22,8 @@ The goals / steps of this project are the following:
 [image1]: ./writeupImg/angleHist.png "Distribution of angles"
 [image2]: ./writeupImg/lossCurve.png "Loss curve"
 [image3]: ./writeupImg/nvidiaNet.png "NvidiaNet Structure"
-[image4]: ./writeupImg/placeholder_small.png "Recovery Image"
-[image5]: ./writeupImg/placeholder_small.png "Recovery Image"
+[image4]: ./writeupImg/v1_img.png "Track 1 Video Cover Photo"
+[image5]: ./writeupImg/v2_img.png "Track 2 Video Cover Photo"
 [image6]: ./writeupImg/placeholder_small.png "Normal Image"
 [image7]: ./writeupImg/placeholder_small.png "Flipped Image"
 
@@ -114,7 +114,7 @@ To capture good driving behavior, I first recorded two laps on track one using c
 I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to .... These images show what a recovery looks like starting from ... :
 
 ![alt text][image3]
-![alt text][image4]
+[![alt text][image4]](https://www.youtube.com/watch?v=iCY66k_YYVc)
 ![alt text][image5]
 
 Then I repeated this process on track two in order to get more data points.
