@@ -103,14 +103,19 @@ The videos of this model running in simulator are recorded and the mp4 file can 
 #### Youtube Videos: 
 
 Autonomous driving on track-1 (click towards youtube): 
+
 [![Video for Track-1](http://img.youtube.com/vi/iCY66k_YYVc/0.jpg)](http://www.youtube.com/watch?v=iCY66k_YYVc)
 
 
+
 Autonomous driving on track-2 (click towards youtube): 
+
 [![Video for Track-2](http://img.youtube.com/vi/SAyf1X6M6WM/0.jpg)](http://www.youtube.com/watch?v=SAyf1X6M6WM)
 
 
+
 High Resolution Autonomous driving on track-2 (click towards youtube): 
+
 [![Video for Track-2](http://img.youtube.com/vi/uLujbFHKmuQ/0.jpg)](http://www.youtube.com/watch?v=uLujbFHKmuQ)
 
 
