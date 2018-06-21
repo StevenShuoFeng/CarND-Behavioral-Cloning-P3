@@ -7,15 +7,18 @@
 
 This project intends to use deep learning to train a regerssion network that can predict best steering angles based on the image of view at any moment. The solution is a supervised regression approach. During training, driver (me) controls the car to drive properly in the simulator and the keyboard input of the steering control as well as the corresponding screen shot of the view are recorded. Then, the images (screenshots) are used as the training data and the recorded steering angles are used as training label to train a single output neural network. The built model is then used to provide steering controls while simulator is in autonomous driving mode.
 
-**Behavioral Cloning Project**
-
-The goals / steps of this project are the following:
+**Goals and Steps**
 * Use the simulator to collect data of good driving behavior
 * Build, a convolution neural network in Keras that predicts steering angles from images
 * Train and validate the model with a training and validation set
 * Test that the model successfully drives around track one without leaving the road
 * Summarize the results with a written report
 
+**File Structure in Repo**
+-- model_center_andLeftRight_cropped_TwoTracks_NvidiaNet.h5: the final model
+-- model.py and model.ipynb: the souce code for building the model
+-- README.md: the final writeup file
+-- /writeupImg: recorded videos and images for writeup
 
 [//]: # (Image References)
 
@@ -24,13 +27,36 @@ The goals / steps of this project are the following:
 [image3]: ./writeupImg/nvidiaNet.png "NvidiaNet Structure"
 [image4]: ./writeupImg/v1_img.png "Track 1 Video Cover Photo"
 [image5]: ./writeupImg/v2_img.png "Track 2 Video Cover Photo"
-[image6]: ./writeupImg/placeholder_small.png "Normal Image"
-[image7]: ./writeupImg/placeholder_small.png "Flipped Image"
 
 
 ### Model Architecture and Training Strategy
+#### 1. Solution Design and Iterative Model Building Approach
 
-#### 1. An appropriate model architecture has been employed
+As stated in the high level summary above, the ultimate goal is to build a neural network that for each individual view image as an input, output the steering angle. The development envolves a few iterations of updating network architecture and adding more training data as described below.
+
+I started with 1 lap of training data from track-1 and a two-layer convolution neural network. The number of training samples is about 3k. From the loss curve, the training loss decrease while the validation loss basically stay unchanged. This is a sign of underfitting. 
+
+Then, the AlexNet and the NvidiaNet are tried out. From the learning curve, either the validation loss decay very slow or it's constantly higher than the training loss curve. Both these are signs of underfitting. Two more laps of training data from track-1 was added, one lap driving clockwise and the other counter clockwise.
+
+The model built at this moment can drive the car well on track-1 in autonomous mode. The trial on track-2 failed. 
+
+Finally, 2 more laps of training data is collected from track-2, one for each direction of driving. The total number of training samples is aboout 16k. The final structure of the neural network is shown in session #3. 
+
+#### 2. Data Pre-processing and Augmentation
+
+During the trials of adding more data in the previous session, different data processsing procedures are tried out. They're listed below:
+
+- Zero-center the image by subtracting 128 for all pixels and all channels
+- Crop the top (60 rows) and bottom (20 rows) of the view to remove context from sky and engine cover of the car
+- Create augmented image by flip the image and the sign of the corresponding angle
+- Make use of the images from left and right camera with adjusted steer angle
+
+These steps help to reduced the complexity of the images and also provide more augmented training data.
+During the training data collection, the distribution of steering angles in the train and validation set are monitored to make sure there's no obvious imbalance. The distribution of steering angles in the data set used is shown below:
+
+![alt text][image1]
+
+#### 3. Final Model Architecture
 
 The final model used in this project is the neural network developed by [Nvidia](https://devblogs.nvidia.com/deep-learning-self-driving-cars/) and the AlexNet was also tried out. The whole seesion of model structure building can be find in [model.py lines 70-110](https://github.com/StevenShuoFeng/CarND-Behavioral-Cloning-P3/blob/master/model.py#L71). 
 
@@ -63,72 +89,18 @@ The structure of the original network is shown below:
 
 ![alt text][image3]
 
-#### 2. Attempts to reduce overfitting in the model
 
-The model contains dropout layers in order to reduce overfitting (model.py lines 21). 
+#### 4. Creation of the Training Set & Training Process
 
-The model was trained and validated on different data sets to ensure that the model was not overfitting (code line 10-16). The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
+As described in session 1, there're about 16k samples in total be collected during the iterations. These data are splited into training and validing data sets by a 80-20 ratio after random shuffle. 
 
-#### 3. Model parameter tuning
+A model is built with the NvidaNet achitecture above. And this version of model, with Adam optimizer, successfully drive on track-1 and track-2 without too much shades in autonomous mode.
 
-The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 25).
+#### 5. Final Results
 
-#### 4. Appropriate training data
+The videos of this model running in simulator are recorded and the mp4 file can be found [here] (https://github.com/StevenShuoFeng/CarND-Behavioral-Cloning-P3/tree/master/writeupImg). 
 
-Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road ... 
+[![Video for Track-1](http://img.youtube.com/vi/iCY66k_YYVc/0.jpg)](http://www.youtube.com/watch?v=iCY66k_YYVc)
 
-For details about how I created the training data, see the next section. 
+[![Video for Track-2](http://img.youtube.com/vi/SAyf1X6M6WM/0.jpg)](http://www.youtube.com/watch?v=SAyf1X6M6WM)
 
-### Model Architecture and Training Strategy
-
-#### 1. Solution Design Approach
-
-The overall strategy for deriving a model architecture was to ...
-
-My first step was to use a convolution neural network model similar to the ... I thought this model might be appropriate because ...
-
-In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set. I found that my first model had a low mean squared error on the training set but a high mean squared error on the validation set. This implied that the model was overfitting. 
-
-To combat the overfitting, I modified the model so that ...
-
-Then I ... 
-
-The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track... to improve the driving behavior in these cases, I ....
-
-At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
-
-#### 2. Final Model Architecture
-
-The final model architecture (model.py lines 18-24) consisted of a convolution neural network with the following layers and layer sizes ...
-
-Here is a visualization of the architecture (note: visualizing the architecture is optional according to the project rubric)
-
-![alt text][image1]
-
-#### 3. Creation of the Training Set & Training Process
-
-To capture good driving behavior, I first recorded two laps on track one using center lane driving. Here is an example image of center lane driving:
-
-![alt text][image2]
-
-I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to .... These images show what a recovery looks like starting from ... :
-
-![alt text][image3]
-[![alt text][image4]](https://www.youtube.com/watch?v=iCY66k_YYVc)
-![alt text][image5]
-
-Then I repeated this process on track two in order to get more data points.
-
-To augment the data sat, I also flipped images and angles thinking that this would ... For example, here is an image that has then been flipped:
-
-![alt text][image6]
-![alt text][image7]
-
-Etc ....
-
-After the collection process, I had X number of data points. I then preprocessed this data by ...
-
-
-I finally randomly shuffled the data set and put Y% of the data into a validation set. 
-
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
