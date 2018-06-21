@@ -15,10 +15,10 @@ This project intends to use deep learning to train a regerssion network that can
 * Summarize the results with a written report
 
 **File Structure in Repo**
--- model_center_andLeftRight_cropped_TwoTracks_NvidiaNet.h5: the final model
--- model.py and model.ipynb: the souce code for building the model
--- README.md: the final writeup file
--- /writeupImg: recorded videos and images for writeup
+* model_center_andLeftRight_cropped_TwoTracks_NvidiaNet.h5: the final model
+* model.py and model.ipynb: the souce code for building the model
+* README.md: the final writeup file
+* /writeupImg: recorded videos and images for writeup
 
 [//]: # (Image References)
 
