@@ -150,9 +150,6 @@ if useAlexNet:
 else:
     model.save('model_center_andLeftRight_cropped_TwoTracks_NvidiaNet.h5')
 
-from keras.models import Model
-
-
 # -------------------------------------------------------------------------------------
 # plot the training and validation loss for each epoch
 plt.plot(history_object.history['loss'])
