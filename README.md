@@ -7,6 +7,11 @@
 
 This project intends to use deep learning to train a regerssion network that can predict best steering angles based on the image of view at any moment. The solution is a supervised regression approach. During training, driver (me) controls the car to drive properly in the simulator and the keyboard input of the steering control as well as the corresponding screen shot of the view are recorded. Then, the images (screenshots) are used as the training data and the recorded steering angles are used as training label to train a single output neural network. The built model is then used to provide steering controls while simulator is in autonomous driving mode.
 
+**Update for 2nd Submission**
+
+* Weight display is added.
+* Extra transfer learning step is added.
+
 **Goals and Steps**
 * Use the simulator to collect data of good driving behavior
 * Build, a convolution neural network in Keras that predicts steering angles from images
@@ -17,6 +22,8 @@ This project intends to use deep learning to train a regerssion network that can
 **File Structure in Repo**
 * model_center_andLeftRight_cropped_TwoTracks_NvidiaNet.h5: the final model
 * model.py and model.ipynb: the souce code for building the model
+* model.h5: the final model
+* model/: directory of mutiple version of models
 * README.md: the final writeup file
 * /writeupImg: recorded videos and images for writeup
 
@@ -28,13 +35,18 @@ This project intends to use deep learning to train a regerssion network that can
 [image4]: ./writeupImg/v1_img.png "Track 1 Video Cover Photo"
 [image5]: ./writeupImg/v2_img.png "Track 2 Video Cover Photo"
 
+[image6]: ./writeupImg/inputImg.png "Input Image"
+[image7]: ./writeupImg/activation_conv1.png "Conv_1 Activation"
+[image8]: ./writeupImg/activation_conv1.png "Conv_2 Activation"
+
+
 
 ### Model Architecture and Training Strategy
 #### 1. Solution Design and Iterative Model Building Approach
 
 As stated in the high level summary above, the ultimate goal is to build a neural network that for each individual view image as an input, output the steering angle. The development envolves a few iterations of updating network architecture and adding more training data as described below.
 
-I started with 1 lap of training data from track-1 and a two-layer convolution neural network. The number of training samples is about 3k. From the loss curve, the training loss decrease while the validation loss basically stay unchanged. This is a sign of underfitting. 
+I started with 1 lap of training data from track-1 and a two-layer convolution neural network. The number of training samples is about 3k. From the loss curve, the training loss decrease while the validation loss basically stay unchanged. This is a sign of overfitting. Two dropout layers are added following each of the first two fully connected layers.
 
 Then, the AlexNet and the NvidiaNet are tried out. From the learning curve, either the validation loss decay very slow or it's constantly higher than the training loss curve. Both these are signs of underfitting. Two more laps of training data from track-1 was added, one lap driving clockwise and the other counter clockwise.
 
@@ -99,6 +111,50 @@ A model is built with the NvidaNet achitecture above. And this version of model,
 #### 5. Final Results
 
 The videos of this model running in simulator are recorded and the mp4 file can be found [here] (https://github.com/StevenShuoFeng/CarND-Behavioral-Cloning-P3/tree/master/writeupImg). 
+
+#### 6. Updates After First Submission.
+During the simulation run by reviewer, the car went off track onto the red alert zone on track-1. This is not observed during my local run however, maybe the model is not generalized well enough for some small difference in settings.
+
+As suggested, some extra data was collected for car location recovery. More specifically, the data is recorded moslty when the car is really close to one side of the edge, and during the collection, the car was adjusted back to the center of the lane. A total of about 1k recover sample data was collect, relative to the about 16k original training data. 
+
+This time the model is training by freezing all layers of the model, except for the final FC output layer. The summary of the model is given below and as can be seen, only 11 weights are trained this time and all the other 559,408 parameters are frozen.
+
+
+``` python
+from keras.models import load_model
+
+modelFn = 'model/model_center_andLeftRight_cropped_TwoTracks_NvidiaNet.h5'
+model = load_model(modelFn)
+
+# Freeze all layers except for the last FC output layer
+for layer in model.layers[:-1]:
+    layer.trainable = False
+
+model.summary()
+
+'''
+Total params: 559,419
+Trainable params: 11
+Non-trainable params: 559,408
+'''
+
+```
+
+A smaller epoch number is chosen too due to the fast convergence on this small data set. A final model is built and tested. It worked much more stable on Track_1, however, it's working well on track_2 anymore. This is probably due to the lack of data from track_2 in this second training step.
+
+Just of my interest, the activation of the first and second convolution layers are checked as below and they seem to be extracting the useful lane edge information.
+
+Input Image:
+
+![alt text][image6]
+
+Activation of Convolution Layer 1:
+
+![alt text][image7]
+
+Activation of Convolution Layer 2:
+
+![alt text][image8]
 
 #### Youtube Videos: 
 
