@@ -11,7 +11,7 @@ This project intends to use deep learning to train a regerssion network that can
 **Update for 2nd Submission**
 
 * Weight display is added.
-* Extra transfer learning step is added.
+* Extra transfer learning step is added as in Session 6.
 
 **Goals and Steps**
 * Use the simulator to collect data of good driving behavior
